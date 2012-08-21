@@ -101,10 +101,17 @@ namespace i18n
                 var regional = TryGetTextFor(culture.IetfLanguageTag, key);
 
                 // Save cycles processing beyond the default; just return the original key
-                if (culture.TwoLetterISOLanguageName.Equals(I18N.DefaultTwoLetterISOLanguageName, StringComparison.OrdinalIgnoreCase))
-                {
-                    return key;
-                }
+                //comment out for #8  
+                //NOTE: disabled this as in any case cultures derivant from en are ignored,
+                // it could be ok to use the key if the language is just en, but with this code
+                // en-US en-AU en-CA are all ignored tho obviousely they could be different from 
+                // the default en variable
+                // next to that "en" cannot be translated using PO files which could be useful
+                // Save cycles processing beyond the default; just return the original key
+//                if (culture.TwoLetterISOLanguageName.Equals(I18N.DefaultTwoLetterISOLanguageName, StringComparison.OrdinalIgnoreCase))
+//                {
+//                    return key;
+//                }
 
                 // en (and regional was defined)
                 if(!culture.IetfLanguageTag.Equals(culture.TwoLetterISOLanguageName, StringComparison.OrdinalIgnoreCase) && regional == key)
