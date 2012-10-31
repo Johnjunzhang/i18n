@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package>
   <metadata>
-    <id>I18N</id>
+    <id>I18N.Customized</id>
     <version>1.0.6-candidate</version>
     <authors>Daniel Crenna</authors>
     <owners>Daniel Crenna</owners>
