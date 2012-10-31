@@ -60,6 +60,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Test.csv" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -72,8 +73,16 @@
       <Name>i18n</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="locale\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /S /Q /I  $(SolutionDir)..\tools\gettext-0.14.4\* $(TargetDir)gettext\
+xcopy /S /Q /I  $(ProjectDir)locale $(TargetDir)locale
+</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

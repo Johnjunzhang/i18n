@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 
 namespace i18n.Tests
 {
@@ -8,9 +9,10 @@ namespace i18n.Tests
         [Test]
         public void Can_process_message_template()
         {
-            const string path = @"TEST_PROJECT_DIR";
+            const string path = ".";
             var task = new PostBuildTask();
-            task.Execute(path);
+            var fileTypeAllowed = new List<string>(){"csv"};
+            task.Execute(path, fileTypeAllowed);
         }
     }
 }

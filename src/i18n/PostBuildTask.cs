@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -17,9 +18,9 @@ namespace i18n
         ///<param name="path"></param>
         ///<param name="gettext"> </param>
         ///<param name="msgmerge"> </param>
-        public void Execute(string path, string gettext = null, string msgmerge = null)
+        public void Execute(string path, List<string> fileTypeAllowed, string gettext = null, string msgmerge = null)
         {
-            var manifest = BuildProjectFileManifest(path);
+            var manifest = BuildProjectFileManifest(path, fileTypeAllowed);
 
             CreateMessageTemplate(path, manifest, gettext);
 
@@ -79,11 +80,11 @@ namespace i18n
             }
         }
 
-        private static string BuildProjectFileManifest(string path)
+        private static string BuildProjectFileManifest(string path, List<string> fileTypeAllowed)
         {
-            var cs = Directory.GetFiles(path, "*.cs", SearchOption.AllDirectories);
-            var razor = Directory.GetFiles(path, "*.cshtml", SearchOption.AllDirectories);
-            var files = (new[] {cs, razor}).SelectMany(f => f).ToList();
+            var files = new List<string>();
+            fileTypeAllowed.ForEach(fileType => files.AddRange(Directory.GetFiles(path, string.Format("*.{0}", fileType), SearchOption.AllDirectories)));
+
             var temp = Path.GetTempFileName();
             using(var sw = File.CreateText(temp))
             {
@@ -94,5 +95,6 @@ namespace i18n
             }
             return temp;
         }
+
     }
 }

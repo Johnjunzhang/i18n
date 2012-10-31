@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace i18n.PostBuild
 {
@@ -27,7 +28,9 @@ namespace i18n.PostBuild
                     msgmerge = args[i].Substring(9);
             }
 
-            new PostBuildTask().Execute(path, gettext, msgmerge);
+            var fileTypeAllowed = System.Configuration.ConfigurationManager.AppSettings["fileType"].Split(',').ToList();
+
+            new PostBuildTask().Execute(path, fileTypeAllowed, gettext, msgmerge);
         }
     }
 }
