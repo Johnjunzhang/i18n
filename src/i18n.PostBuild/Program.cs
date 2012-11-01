@@ -13,13 +13,15 @@ namespace i18n.PostBuild
                 return;
             }
 
-            var path = args[0];
-            path = path.Trim(new[] {'\"'});
+            var projectPath = args[0];
+            projectPath = projectPath.Trim(new[] {'\"'});
+
+            var gettextExePath = args[1].Trim(new[] { '\"' });
 
             string gettext = null;
             string msgmerge = null;
 
-            for (int i = 1; i < args.Length; i++)
+            for (int i = 2; i < args.Length; i++)
             {
                 if (args[i].StartsWith("gettext:", StringComparison.InvariantCultureIgnoreCase))
                     gettext = args[i].Substring(8);
@@ -30,7 +32,7 @@ namespace i18n.PostBuild
 
             var fileTypeAllowed = System.Configuration.ConfigurationManager.AppSettings["fileType"].Split(',').ToList();
 
-            new PostBuildTask().Execute(path, fileTypeAllowed, gettext, msgmerge);
+            new PostBuildTask(gettextExePath, projectPath).Execute(fileTypeAllowed, gettext, msgmerge);
         }
     }
 }

@@ -10,9 +10,9 @@ namespace i18n.Tests
         public void Can_process_message_template()
         {
             const string path = ".";
-            var task = new PostBuildTask();
-            var fileTypeAllowed = new List<string>(){"csv"};
-            task.Execute(path, fileTypeAllowed);
+            var task = new PostBuildTask(path+"\\gettext", path);
+            var fileTypeAllowed = new List<string> {"csv"};
+            task.Execute(fileTypeAllowed);
         }
     }
 }

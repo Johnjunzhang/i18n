@@ -1,4 +1,4 @@
-i18n (http://github.com/danielcrenna/i18n)
+i18n (http://github.com/xianjing/i18n which is forked from http://github.com/danielcrenna/i18n)
 --------------------------------------
 Copyright (c) 2011-2012 Daniel Crenna
 

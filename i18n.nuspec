@@ -3,8 +3,8 @@
   <metadata>
     <id>I18N.Customized</id>
     <version>1.0.6-candidate</version>
-    <authors>Daniel Crenna</authors>
-    <owners>Daniel Crenna</owners>
+    <authors>Xianjing and Team</authors>
+    <owners></owners>
     <summary>Smart internationalization for .NET web apps</summary>
 	<description>
     Smart internationalization for .NET web apps;
@@ -12,19 +12,18 @@
     Localizes everything; controller calls, views, validation attributes, and routes.
     </description>
     <language>en-US</language>
-    <projectUrl>http://github.com/danielcrenna/i18n</projectUrl>
-    <licenseUrl>https://github.com/danielcrenna/i18n/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/xianjing/i18n</projectUrl>
+    <licenseUrl>https://github.com/xianjing/i18n/blob/master/LICENSE.md</licenseUrl>
     <iconUrl>http://apitize.com.s3.amazonaws.com/logo_i18n.png</iconUrl>
     <tags>i18n localization globalization</tags>
-    <releaseNotes>Fixed issues with gettext disallowing NuGet installation</releaseNotes>
-    <copyright>Copyright 2012 Daniel Crenna</copyright>
+    <releaseNotes>allow postbuild to search csv for gettext</releaseNotes>
+    <copyright>Copyright 2012</copyright>
   </metadata>
   <files>
-    <file src="LICENSE.md" target="" /> 
     <file src="README.md" target="" /> 	
     <file src="tools\gettext-0.14.4\*" target="tools\gettext-0.14.4" />    
-	<file src="src\i18n.MVC3\obj\Debug\*.dll" target="lib\net40\" />    
-	<file src="src\i18n.MVC4\obj\Debug\*.dll" target="lib\net40\" />    
+	<file src="src\i18n.MVC3\obj\Debug\*.dll" target="lib\net40\mvc3" />    
+	<file src="src\i18n.MVC4\obj\Debug\*.dll" target="lib\net40\mvc4" />    
 	<file src="src\i18n.PostBuild\bin\Debug\*.dll" target="lib\net40\" />    
 	<file src="src\i18n.PostBuild\bin\Debug\*.config" target="lib\net40\" />    
 	<file src="src\i18n.PostBuild\bin\Debug\*.exe" target="lib\net40\" />    

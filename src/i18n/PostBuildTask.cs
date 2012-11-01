@@ -12,24 +12,33 @@ namespace i18n
     /// </summary>
     public class PostBuildTask
     {
+        private readonly string gettextExePath;
+        private readonly string path;
+
+        public PostBuildTask(string gettextExePath, string path)
+        {
+            this.gettextExePath = gettextExePath;
+            this.path = path;
+        }
+
         ///<summary>
         /// Runs GNU xgettext to extract a messages template file
         ///</summary>
-        ///<param name="path"></param>
-        ///<param name="gettext"> </param>
+        ///<param name="fileTypeAllowed"></param>
+        ///<param name="gettextOptions"> </param>
         ///<param name="msgmerge"> </param>
-        public void Execute(string path, List<string> fileTypeAllowed, string gettext = null, string msgmerge = null)
+        public void Execute(List<string> fileTypeAllowed, string gettextOptions = null, string msgmerge = null)
         {
-            var manifest = BuildProjectFileManifest(path, fileTypeAllowed);
+            var manifest = BuildProjectFileManifest(fileTypeAllowed);
 
-            CreateMessageTemplate(path, manifest, gettext);
+            CreateMessageTemplate(manifest, gettextOptions);
 
-            MergeTemplateWithExistingLocales(path, msgmerge);
+            MergeTemplateWithExistingLocales(msgmerge);
 
             File.Delete(manifest);
         }
 
-        private static void MergeTemplateWithExistingLocales(string path, string options)
+        private void MergeTemplateWithExistingLocales(string options)
         {
             var locales = Directory.GetDirectories(string.Format("{0}\\locale\\", path));
             var template = string.Format("{0}\\locale\\messages.pot", path);
@@ -40,7 +49,7 @@ namespace i18n
                 {
                     // http://www.gnu.org/s/hello/manual/gettext/msgmerge-Invocation.html
                     var args = string.Format("{2} -U \"{0}\" \"{1}\"", messages, template, options);
-                    RunWithOutput("gettext\\msgmerge.exe", args);
+                    RunWithOutput(string.Format("{0}\\msgmerge.exe", gettextExePath), args);
                 }
                 else
                 {
@@ -49,11 +58,11 @@ namespace i18n
             }
         }
 
-        private static void CreateMessageTemplate(string path, string manifest, string options)
+        private void CreateMessageTemplate(string manifest, string options)
         {
             // http://www.gnu.org/s/hello/manual/gettext/xgettext-Invocation.html
             var args = string.Format("{2} -LC# -k_ --omit-header --from-code=UTF-8 -o\"{0}\\locale\\messages.pot\" -f\"{1}\"", path, manifest, options);
-            RunWithOutput("gettext\\xgettext.exe", args);
+            RunWithOutput(string.Format("{0}\\xgettext.exe", gettextExePath), args);
         }
 
         private static void RunWithOutput(string filename, string args)
@@ -80,7 +89,7 @@ namespace i18n
             }
         }
 
-        private static string BuildProjectFileManifest(string path, List<string> fileTypeAllowed)
+        private string BuildProjectFileManifest(List<string> fileTypeAllowed)
         {
             var files = new List<string>();
             fileTypeAllowed.ForEach(fileType => files.AddRange(Directory.GetFiles(path, string.Format("*.{0}", fileType), SearchOption.AllDirectories)));
