@@ -102,7 +102,7 @@ namespace i18n
 
                 // Save cycles processing beyond the default; just return the original key
                 //comment out for #8  
-                //NOTE: disabled this as in any case cultures derivant from en are ignored,
+                //NOTE: (tw) disabled this as in any case cultures derivant from en are ignored
                 // it could be ok to use the key if the language is just en, but with this code
                 // en-US en-AU en-CA are all ignored tho obviousely they could be different from 
                 // the default en variable
