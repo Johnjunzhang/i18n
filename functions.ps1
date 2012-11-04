@@ -1,12 +1,11 @@
-Function Extract-TranslatableText($getTextPath, $projectPath, $include, $template){
-    Get-ChildItem $projectPath -Recurse -Include $include | 
+Function Extract-TranslatableText($getTextPath, $projectPath, $include, $exclude, $template){
+    Get-ChildItem $projectPath -Recurse -Include $include -Exclude $exclude | 
     	% { 
     		$sourceFiles += $_.FullName + " "
     	}
-
-    $output = (Get-Item $template).FullName
+	Write-Host $sourceFiles
     if( $sourceFiles -ne $null  -and $sourceFiles -ne ""){
-	    iex "$getTextPath\xgettext.exe -LC# -k_ --omit-header --from-code=UTF-8 -o$output $sourceFiles" 
+	    iex "$getTextPath\xgettext.exe -LC# -k_ --omit-header --from-code=UTF-8 -o$template $sourceFiles" 
 	    Write-Host "Extract-TranslatableText From $projectPath folder includes $include." -f cyan
 	}
     

@@ -10,7 +10,7 @@ trap{
 $error.clear()
 
 $root = $MyInvocation.MyCommand.Path | Split-Path -parent
-. functions.ps1
+. $root\functions.ps1
 
 $config = Import-Config $root\config.ini
 $getTextPath = $root + "\" + $config.gettextPath
@@ -19,6 +19,7 @@ if( -not (Test-Path $getTextPath)) {
 		throw "Could not find gettext tool."
 }
 
+$projectPath = $root+"\"+$projectPath
 $localePath = $projectPath + "\locale"
 $template = $projectPath + "\locale\messages.pot"
 if ( -not (Test-Path $localePath) ) {
@@ -29,7 +30,10 @@ if ( -not (Test-Path $template) ) {
 }
 
 $include = [string[]]($config.sourceFileType -Split ',' | % { "*.{0}" -f $_.trim() })
+$exclude = [string[]]($config.excludeFiles -Split ',' | % { "{0}*" -f $_.trim() })
+write-host  $exclude
 
-Extract-TranslatableText $getTextPath $projectPath $include $template 
-Merge-ExistingPoFile $getTextPath $localePath $template 
+
+Extract-TranslatableText $getTextPath $projectPath $include $exclude $template
+Merge-ExistingPoFile $getTextPath $localePath $template
 
