@@ -10,16 +10,15 @@ trap{
 $error.clear()
 
 $root = $MyInvocation.MyCommand.Path | Split-Path -parent
-. $root\functions.ps1
+. $root\scripts\functions.ps1
 
-$config = Import-Config $root\config.ini
+$config = Import-Config $root\scripts\config.ini
 $getTextPath = $root + "\" + $config.gettextPath
 
 if( -not (Test-Path $getTextPath)) {
 	throw "Could not find gettext tool."
 }
 
-$projectPath = $root+"\"+$projectPath
 $localePath = $projectPath + "\locale"
 $template = $projectPath + "\locale\messages.pot"
 
@@ -31,6 +30,7 @@ if ( -not (Test-Path $template) ) {
 }
 
 $inputFiles = Get-Files $projectPath $config
+Write-Host $inputFiles
 if( $inputFiles){    	
     iex "$getTextPath\xgettext.exe -LC# -k_ --omit-header --from-code=UTF-8 -o$template $inputFiles"
 }
