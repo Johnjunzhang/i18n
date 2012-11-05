@@ -108,11 +108,10 @@ to `ILocalizingService`; here is what implementing `ILocalizing` on a `Controlle
 
 #### Building PO databases
 
-To set up automatic PO database building, add the following post-build task to your project, after
-adding `i18n.PostBuild.exe` as a project reference:
+To set up automatic PO database building, add the following post-build task to your project.
 
 ```
-    "$(TargetDir)i18n.PostBuild.exe" "$(ProjectDir)"
+    "$i18nPackagesDir)i18n.PostBuild.ps1" "$(ProjectDir)"
 ```
     
 After a successful build, this task will rip through your source code, finding everywhere you've used the `ILocalizing._("text")` alias, 
