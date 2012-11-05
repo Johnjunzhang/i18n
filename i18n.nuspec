@@ -21,8 +21,8 @@
   </metadata>
   <files>
     <file src="README.md" target="" /> 	
-	<file src="*.ps1" target="" /> 	
-	<file src="config.ini" target="" /> 	
+	<file src="*.ps1" target="scripts" /> 	
+	<file src="config.ini" target="scripts" /> 	
     <file src="tools\gettext-0.14.4\*" target="tools\gettext-0.14.4" />    
 	<file src="src\i18n.MVC3\obj\Debug\*.dll" target="lib\net40\mvc3" />    
 	<file src="src\i18n.MVC4\obj\Debug\*.dll" target="lib\net40\mvc4" />    
