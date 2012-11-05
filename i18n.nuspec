@@ -16,18 +16,17 @@
     <licenseUrl>https://github.com/xianjing/i18n/blob/master/LICENSE.md</licenseUrl>
     <iconUrl>http://apitize.com.s3.amazonaws.com/logo_i18n.png</iconUrl>
     <tags>i18n localization globalization</tags>
-    <releaseNotes>allow postbuild to search csv for gettext</releaseNotes>
+    <releaseNotes>powershell script to support i18n postbuild to extract translatable text and merge</releaseNotes>
     <copyright>Copyright 2012</copyright>
   </metadata>
   <files>
     <file src="README.md" target="" /> 	
-	<file src="*.ps1" target="scripts" /> 	
-	<file src="config.ini" target="scripts" /> 	
+	<file src="*.ps1" target="" />
+	<file src="scripts\*" target="scripts" />
     <file src="tools\gettext-0.14.4\*" target="tools\gettext-0.14.4" />    
-	<file src="src\i18n.MVC3\obj\Debug\*.dll" target="lib\net40\mvc3" />    
 	<file src="src\i18n.MVC4\obj\Debug\*.dll" target="lib\net40\mvc4" />    
 	<file src="src\i18n.PostBuild\bin\Debug\*.dll" target="lib\net40\" />    
 	<file src="src\i18n.PostBuild\bin\Debug\*.config" target="lib\net40\" />    
-	<file src="src\i18n.PostBuild\bin\Debug\*.exe" target="lib\net40\" />    
+	<file src="src\i18n.PostBuild\bin\Debug\*.exe" target="lib\net40\" /> 
   </files>
 </package>
