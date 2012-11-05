@@ -20,13 +20,8 @@
     <copyright>Copyright 2012</copyright>
   </metadata>
   <files>
-    <file src="README.md" target="" /> 	
-	<file src="*.ps1" target="" />
-	<file src="scripts\*" target="scripts" />
-    <file src="tools\gettext-0.14.4\*" target="tools\gettext-0.14.4" />    
-	<file src="src\i18n.MVC4\obj\Debug\*.dll" target="lib\net40\mvc4" />    
-	<file src="src\i18n.PostBuild\bin\Debug\*.dll" target="lib\net40\" />    
-	<file src="src\i18n.PostBuild\bin\Debug\*.config" target="lib\net40\" />    
-	<file src="src\i18n.PostBuild\bin\Debug\*.exe" target="lib\net40\" /> 
+    <file src="*.ps1" target="" />
+	<file src="scripts\*" target="scripts" />    
+	<file src="bin\**" target="" /> 
   </files>
 </package>
