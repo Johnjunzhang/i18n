@@ -208,47 +208,51 @@ namespace i18n
 
             lock (Sync)
             {
-                using (var fs = File.OpenText(path))
+                using (var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read))
                 {
-                    // http://www.gnu.org/s/hello/manual/gettext/PO-Files.html
-
-                    var messages = new List<I18NMessage>(0);
-                    string line;
-                    while ((line = fs.ReadLine()) != null)
+                    using (var fs = new StreamReader(fileStream, Encoding.Default))
                     {
-                        if (line.StartsWith("#~"))
-                        {
-                            continue;
-                        }
+                        // http://www.gnu.org/s/hello/manual/gettext/PO-Files.html
 
-                        var message = new I18NMessage();
-                        var sb = new StringBuilder();
-
-                        if (line.StartsWith("#"))
+                        var messages = new List<I18NMessage>(0);
+                        string line;
+                        while ((line = fs.ReadLine()) != null)
                         {
-                            sb.Append(CleanCommentLine(line));
-                            while((line = fs.ReadLine()) != null && line.StartsWith("#"))
+                            if (line.StartsWith("#~"))
+                            {
+                                continue;
+                            }
+
+                            var message = new I18NMessage();
+                            var sb = new StringBuilder();
+
+                            if (line.StartsWith("#"))
                             {
                                 sb.Append(CleanCommentLine(line));
+                                while((line = fs.ReadLine()) != null && line.StartsWith("#"))
+                                {
+                                    sb.Append(CleanCommentLine(line));
+                                }
+                                message.Comment = sb.ToString();
+
+                                sb.Clear();
+                                ParseBody(fs, line, sb, message, quoted);
+                                messages.Add(message);
                             }
-                            message.Comment = sb.ToString();
-
-                            sb.Clear();
-                            ParseBody(fs, line, sb, message, quoted);
-                            messages.Add(message);
+                            else if (line.StartsWith("msgid"))
+                            {
+                                ParseBody(fs, line, sb, message, quoted);
+                            }
                         }
-                        else if (line.StartsWith("msgid"))
+
+                        lock (Sync)
                         {
-                            ParseBody(fs, line, sb, message, quoted);
+                            // If the file changes we want to be able to rebuild the index without recompiling
+                            HttpRuntime.Cache.Insert(string.Format("po:{0}", culture), messages, new CacheDependency(path));
                         }
-                    }
-
-                    lock (Sync)
-                    {
-                        // If the file changes we want to be able to rebuild the index without recompiling
-                        HttpRuntime.Cache.Insert(string.Format("po:{0}", culture), messages, new CacheDependency(path));
                     }
                 }
+
             }
         }
 

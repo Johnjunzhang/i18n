@@ -12,8 +12,6 @@ $error.clear()
 $root = $MyInvocation.MyCommand.Path | Split-Path -parent
 . $root\scripts\functions.ps1
 $config = Import-Config $root\scripts\config.ini
-Write-Host $projectPath
-$projectPath = Resolve-Path "$projectPath" -Relative
 
 if( -not (Test-Path $projectPath)) {
 	throw "Could not find project path $projectPath."
