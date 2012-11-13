@@ -16,7 +16,7 @@
     <licenseUrl>https://github.com/xianjing/i18n/blob/master/LICENSE.md</licenseUrl>
     <iconUrl>http://apitize.com.s3.amazonaws.com/logo_i18n.png</iconUrl>
     <tags>i18n localization globalization</tags>
-    <releaseNotes>fix first time resolver</releaseNotes>
+    <releaseNotes>exclude pdb in package</releaseNotes>
     <copyright>Copyright 2012</copyright>
   </metadata>
   <files>
