@@ -22,7 +22,8 @@ namespace i18n
             object entry;
             if(!_cache.TryGetValue(contract, out entry))
             {
-                _cache[contract] = _typeBuilders[contract](this);
+                entry = _typeBuilders[contract](this);
+                _cache[contract] = entry;
             }
             return (T)entry;
         }

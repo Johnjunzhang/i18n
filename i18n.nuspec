@@ -16,7 +16,7 @@
     <licenseUrl>https://github.com/xianjing/i18n/blob/master/LICENSE.md</licenseUrl>
     <iconUrl>http://apitize.com.s3.amazonaws.com/logo_i18n.png</iconUrl>
     <tags>i18n localization globalization</tags>
-    <releaseNotes>powershell script to support i18n postbuild to extract translatable text and merge</releaseNotes>
+    <releaseNotes>fix french character display issue and first time resolver</releaseNotes>
     <copyright>Copyright 2012</copyright>
   </metadata>
   <files>
