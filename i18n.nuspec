@@ -21,7 +21,7 @@
   </metadata>
   <files>
     <file src="*.ps1" target="" />
-	<file src="scripts\*" target="scripts" />    
-	<file src="bin\**\**.dll" target="" exclude="**\*MVC3.dll" /> 
+	<file src="tools\**" target="tools\" />    
+	<file src="bin\**\*.dll" target="" exclude="**\*MVC3.dll" /> 
   </files>
 </package>
