@@ -1,4 +1,6 @@
-﻿namespace i18n
+﻿using System.Collections.Generic;
+
+namespace i18n
 {
     /// <summary>
     /// Defines a service for retrieving localized text from data source
@@ -19,5 +21,7 @@
         /// <param name="languages">A sorted list of language preferences</param>
         /// <returns></returns>
         string GetText(string key, string[] languages);
+
+        IList<I18NMessage> GetAllText(string languages);
     }
 }

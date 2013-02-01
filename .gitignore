@@ -1,5 +1,6 @@
 #ignore thumbnails created by windows
 Thumbs.db
+
 #Ignore files build by Visual Studio
 *.obj
 *.pdb
@@ -34,4 +35,12 @@ Examples*/
 publish.xml
 TestResults
 *.nupkg
-src/packages/*
+
+#ignore nupkgs downloaded from nuget repo
+packages/**
+src/packages/**
+
+tmp/*
+
+#ignore 3rd party tools auto downloaded by nscaffold
+build/tools/ps-gets/**

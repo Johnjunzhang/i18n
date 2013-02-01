@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System.Collections.Generic;
+using System.Web;
 
 namespace i18n
 {
@@ -49,7 +50,6 @@ namespace i18n
                     context.Session.Add(SessionKey, language);
                 }
             }
-            
             return language;
         }
 
@@ -81,6 +81,12 @@ namespace i18n
             var languages = context.Request.UserLanguages;
             text = localizingService.GetText(text, languages);
             return HttpUtility.HtmlDecode(text);
+        }
+
+        public virtual IList<I18NMessage> GetAllText(HttpContextBase context)
+        {
+            var culture = GetLanguageFromSessionOrService(context);
+            return localizingService.GetAllText(culture);
         }
 
         public virtual string GetUrlFromRequest(HttpRequestBase context)

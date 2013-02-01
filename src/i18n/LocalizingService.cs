@@ -135,6 +135,18 @@ namespace i18n
             return key;
         }
 
+        public IList<I18NMessage> GetAllText(string language)
+        {
+            var culture = GetCultureInfoFromLanguage(language).IetfLanguageTag;
+            var i18NMessages = (List<I18NMessage>) HttpRuntime.Cache["po:culture"];
+            if (i18NMessages == null || i18NMessages.Count == 0)
+            {
+                LoadMessages(culture);
+                i18NMessages = (List<I18NMessage>)HttpRuntime.Cache["po:culture"];
+            }
+            return i18NMessages;
+        }
+
         private static string TryGetTextFor(string culture, string key)
         {
             lock (Sync)

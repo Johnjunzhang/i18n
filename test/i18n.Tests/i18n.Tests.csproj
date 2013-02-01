@@ -5,13 +5,14 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E7A9BBA3-8A95-492C-8806-4DE63C1DBA06}</ProjectGuid>
+    <ProjectGuid>{EA15ECE8-9513-4290-9438-6F70D288BBDD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>i18n</RootNamespace>
-    <AssemblyName>i18n</AssemblyName>
+    <RootNamespace>i18n.Tests</RootNamespace>
+    <AssemblyName>i18n.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
@@ -27,65 +28,51 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\bin\lib\net40\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\bin\lib\net40\i18n.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>i18n.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core">
+      <HintPath>..\..\packages\Castle.Core.3.1.0\lib\net40-client\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="FakeItEasy">
+      <HintPath>..\..\packages\FakeItEasy.1.7.4626.65\lib\NET40\FakeItEasy.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
+    <Reference Include="xunit">
+      <HintPath>..\..\packages\xunit.1.9.1\lib\net20\xunit.dll</HintPath>
+    </Reference>
+    <Reference Include="xunit.extensions">
+      <HintPath>..\..\packages\xunit.extensions.1.9.1\lib\net20\xunit.extensions.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClonedHttpRequest.cs" />
-    <Compile Include="ClonedHttpContext.cs" />
-    <Compile Include="IocContainer.cs" />
-    <Compile Include="DataAnnotations\DataType.cs" />
-    <Compile Include="DataAnnotations\DataTypeAttribute.cs" />
-    <Compile Include="DataAnnotations\DisplayAttribute.cs" />
-    <Compile Include="HtmlString.cs" />
-    <Compile Include="DataAnnotations\LocalizingAttribute.cs" />
-    <Compile Include="DataAnnotations\StringLengthAttribute.cs" />
-    <Compile Include="DataAnnotations\ValidationAttribute.cs" />
-    <Compile Include="DefaultSettings.cs" />
-    <Compile Include="DependencyResolver.cs" />
-    <Compile Include="I18NMessage.cs" />
-    <Compile Include="ILocalizing.cs" />
-    <Compile Include="ILocalizingService.cs" />
-    <Compile Include="IHtmlStringFormatter.cs" />
-    <Compile Include="LocalizingService.cs" />
+    <Compile Include="IoCContainerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="I18NSession.cs" />
-    <Compile Include="DataAnnotations\RequiredAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="i18n.snk" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\i18n\i18n.csproj">
+      <Project>{E7A9BBA3-8A95-492C-8806-4DE63C1DBA06}</Project>
+      <Name>i18n</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-  </PropertyGroup>
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <PropertyGroup>
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
-  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
