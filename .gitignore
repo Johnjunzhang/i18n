@@ -37,8 +37,9 @@ TestResults
 *.nupkg
 
 #ignore nupkgs downloaded from nuget repo
-packages/**
+packages
 src/packages/**
+packages/**
 
 tmp/*
 
