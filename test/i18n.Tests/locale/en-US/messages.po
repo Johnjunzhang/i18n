@@ -1,0 +1,34 @@
+#: .\Report\Templates\questionnaire.st:3
+#: ..\Report\Templates\questionnaire.st:3
+msgid "Immigration Questionnaire Report"
+msgstr ""
+
+#: .\StaticContent\I18N\Country.csv:2 ..\StaticContent\I18N\Country.csv:2
+msgid "Afghanistan"
+msgstr ""
+
+#: ..\StaticContent\templates\questionnaire-overview.html:7
+#: ..\StaticContent\templates\section-list.html:7
+msgid "Back to Questionnaire Page"
+msgstr ""
+
+#: ..\StaticContent\templates\questionnaire-overview.html:15
+msgid "Getting Started - Introduction"
+msgstr ""
+
+#: ..\StaticContent\templates\questionnaire-overview.html:20
+msgid "Welcome to the questionnaire."
+msgstr ""
+
+#: ..\StaticContent\templates\questionnaire-overview.html:21
+msgid ""
+"For ease of completing this questionnaire, you have to answer some mandatory "
+"questions before starting."
+msgstr ""
+
+#: ..\StaticContent\templates\questionnaire-overview.html:22
+msgid ""
+"Depending on your answers, myVisas will be automatically tailored to your "
+"situation and filter sections that you are only required th complete, by "
+"either adding or removing sections and questions from the questionnaire."
+msgstr ""

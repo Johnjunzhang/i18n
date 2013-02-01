@@ -83,12 +83,6 @@ namespace i18n
             return HttpUtility.HtmlDecode(text);
         }
 
-        public virtual IList<I18NMessage> GetAllText(HttpContextBase context)
-        {
-            var culture = GetLanguageFromSessionOrService(context);
-            return localizingService.GetAllText(culture);
-        }
-
         public virtual string GetUrlFromRequest(HttpRequestBase context)
         {
             var url = context.RawUrl;

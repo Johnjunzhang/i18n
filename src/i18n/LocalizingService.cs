@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Caching;
 using System.Web.Hosting;
+using i18n.Parsers;
 
 namespace i18n
 {
@@ -215,100 +214,12 @@ namespace i18n
 
         private static void LoadFromDiskAndCache(string culture, string path)
         {
-            //If the msgstr is 1 word length, e.g. msgstr \"a\", it does not worked
-            var quoted = new Regex("(?:\"(?:[^\"]+.)*\")", RegexOptions.Compiled);
-
             lock (Sync)
             {
-                using (var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read))
-                {
-                    using (var fs = new StreamReader(fileStream, Encoding.Default))
-                    {
-                        // http://www.gnu.org/s/hello/manual/gettext/PO-Files.html
-
-                        var messages = new List<I18NMessage>(0);
-                        string line;
-                        while ((line = fs.ReadLine()) != null)
-                        {
-                            if (line.StartsWith("#~"))
-                            {
-                                continue;
-                            }
-
-                            var message = new I18NMessage();
-                            var sb = new StringBuilder();
-
-                            if (line.StartsWith("#"))
-                            {
-                                sb.Append(CleanCommentLine(line));
-                                while((line = fs.ReadLine()) != null && line.StartsWith("#"))
-                                {
-                                    sb.Append(CleanCommentLine(line));
-                                }
-                                message.Comment = sb.ToString();
-
-                                sb.Clear();
-                                ParseBody(fs, line, sb, message, quoted);
-                                messages.Add(message);
-                            }
-                            else if (line.StartsWith("msgid"))
-                            {
-                                ParseBody(fs, line, sb, message, quoted);
-                            }
-                        }
-
-                        lock (Sync)
-                        {
-                            // If the file changes we want to be able to rebuild the index without recompiling
-                            HttpRuntime.Cache.Insert(string.Format("po:{0}", culture), messages, new CacheDependency(path));
-                        }
-                    }
-                }
-
+                var messages = new I18NPoFileParser().Parse(path);
+                // If the file changes we want to be able to rebuild the index without recompiling
+                HttpRuntime.Cache.Insert(string.Format("po:{0}", culture), messages, new CacheDependency(path));
             }
-        }
-
-        private static void ParseBody(TextReader fs, string line, StringBuilder sb, I18NMessage message, Regex quoted)
-        {
-            if(!string.IsNullOrEmpty(line))
-            {
-                if(line.StartsWith("msgid"))
-                {
-                    int firstIndex = line.IndexOf('\"');
-                    int lastIndex = line.LastIndexOf('\"');
-                    var msgid = line.Substring(firstIndex + 1, lastIndex - firstIndex - 1);
-                    sb.Append(msgid);
-
-                    while ((line = fs.ReadLine()) != null && !line.StartsWith("msgstr") && !string.IsNullOrWhiteSpace(msgid = quoted.Match(line).Value))
-                    {
-                        sb.Append(msgid.Substring(1, msgid.Length - 2));
-                    }
-
-                    message.MsgId = sb.ToString();
-                }
-
-                sb.Clear();
-                if(!string.IsNullOrEmpty(line) && line.StartsWith("msgstr"))
-                {
-                    //var msgstr = quoted.Match(line).Value;
-                    //sb.Append(msgstr.Substring(1, msgstr.Length - 2));
-                    int firstIndex = line.IndexOf('\"');
-                    int lastIndex = line.LastIndexOf('\"');
-                    var msgstr = line.Substring(firstIndex+1, lastIndex-firstIndex-1);
-                    sb.Append(msgstr);
-                    while ((line = fs.ReadLine()) != null && !string.IsNullOrEmpty(msgstr = quoted.Match(line).Value))
-                    {
-                        sb.Append(msgstr.Substring(1, msgstr.Length - 2));
-                    }
-
-                    message.MsgStr = sb.ToString();
-                }
-            }
-        }
-
-        private static string CleanCommentLine(string line)
-        {
-            return line.Replace("# ", "").Replace("#. ", "").Replace("#: ", "").Replace("#, ", "").Replace("#| ", "");
         }
 
         private static string GetTextOrDefault(string culture, string key)
@@ -317,7 +228,7 @@ namespace i18n
             {
                 var messages = (List<I18NMessage>) HttpRuntime.Cache[string.Format("po:{0}", culture)];
 
-                if (messages.Count() == 0)
+                if (!messages.Any())
                 {
                     return key;
                 }

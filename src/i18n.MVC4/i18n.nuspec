@@ -22,6 +22,6 @@
   <files>
     <file src="..\..\generate-po.ps1" target="" />
 	  <file src="..\..\tools\**" target="tools\" />    
-	  <file src="bin\Debug\*.dll" target="lib\net40\"/> 
+	  <file src="bin\Debug\i18n*.dll" target="lib\net40\"/> 
   </files>
 </package>

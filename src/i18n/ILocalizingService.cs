@@ -21,7 +21,5 @@ namespace i18n
         /// <param name="languages">A sorted list of language preferences</param>
         /// <returns></returns>
         string GetText(string key, string[] languages);
-
-        IList<I18NMessage> GetAllText(string languages);
     }
 }

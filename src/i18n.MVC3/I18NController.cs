@@ -28,10 +28,5 @@ namespace i18n
         {
             return new MvcHtmlString(_session.GetText(HttpContext, text));
         }
-
-        public virtual IList<I18NMessage> GetAllText()
-        {
-            return _session.GetAllText(HttpContext);
-        }
     }
 }
