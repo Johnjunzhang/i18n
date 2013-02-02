@@ -40,6 +40,9 @@
     <Reference Include="FakeItEasy">
       <HintPath>..\..\packages\FakeItEasy.1.7.4626.65\lib\NET40\FakeItEasy.dll</HintPath>
     </Reference>
+    <Reference Include="Moq">
+      <HintPath>..\..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Web" />
@@ -52,19 +55,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Parsers\I18NPoFileParserFacts.cs" />
+    <Compile Include="Messages\ChangeListParserFacts.cs" />
+    <Compile Include="Messages\I18NMessagesCacheFacts.cs" />
+    <Compile Include="Messages\I18NPoFileParserFacts.cs" />
     <Compile Include="IoCContainerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="locale\en-US\messages.po">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\i18n.Core\i18n.Core.csproj">
+      <Project>{DC7BC329-5A9A-4537-B7E8-D6E88F058D71}</Project>
+      <Name>i18n.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\i18n\i18n.csproj">
       <Project>{E7A9BBA3-8A95-492C-8806-4DE63C1DBA06}</Project>
       <Name>i18n</Name>

@@ -57,7 +57,6 @@
   <ItemGroup>
     <Compile Include="ClonedHttpRequest.cs" />
     <Compile Include="ClonedHttpContext.cs" />
-    <Compile Include="Parsers\I18NPoFileParser.cs" />
     <Compile Include="IocContainer.cs" />
     <Compile Include="DataAnnotations\DataType.cs" />
     <Compile Include="DataAnnotations\DataTypeAttribute.cs" />
@@ -68,7 +67,6 @@
     <Compile Include="DataAnnotations\ValidationAttribute.cs" />
     <Compile Include="DefaultSettings.cs" />
     <Compile Include="DependencyResolver.cs" />
-    <Compile Include="I18NMessage.cs" />
     <Compile Include="ILocalizing.cs" />
     <Compile Include="ILocalizingService.cs" />
     <Compile Include="IHtmlStringFormatter.cs" />
@@ -83,7 +81,12 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\i18n.Core\i18n.Core.csproj">
+      <Project>{DC7BC329-5A9A-4537-B7E8-D6E88F058D71}</Project>
+      <Name>i18n.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

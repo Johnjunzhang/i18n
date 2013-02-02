@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Web;
-using System.Web.Caching;
-using System.Web.Hosting;
-using i18n.Parsers;
+using i18n.Core;
+using i18n.Core.Models;
 
 namespace i18n
 {
@@ -15,7 +12,12 @@ namespace i18n
     /// </summary>
     public class LocalizingService : ILocalizingService
     {
-        private static readonly object Sync = new object();
+        private readonly I18NMessagesRepository i18NMessagesRepository;
+
+        public LocalizingService(I18NMessagesRepository i18NMessagesRepository)
+        {
+            this.i18NMessagesRepository = i18NMessagesRepository;
+        }
 
         /// <summary>
         /// Returns the best matching language for this application's resources, based the provided languages
@@ -57,29 +59,10 @@ namespace i18n
             return DefaultSettings.DefaultTwoLetterISOLanguageName;
         }
 
-        private static string GetLanguageIfAvailable(string culture)
+        private string GetLanguageIfAvailable(string culture)
         {
-            culture = culture.ToLowerInvariant();
-
-            var cacheKey = string.Format("po:{0}", culture);
-
-            lock (Sync)
-            {
-                if (HttpRuntime.Cache[cacheKey] != null)
-                {
-                    // This language is already available
-                    return ((List<I18NMessage>)HttpRuntime.Cache[cacheKey]).Count > 0 ? culture : null;
-                }
-            }
-
-            if (LoadMessages(culture) && ((List<I18NMessage>)HttpRuntime.Cache[cacheKey]).Count > 0)
-            {
-                return culture;
-            }
-            
-            // Avoid shredding the disk looking for non-existing files
-            CreateEmptyMessages(culture);
-            return null;
+            var messages = i18NMessagesRepository.Get(culture);
+            return messages.Count > 0 ? culture : null;
         }
 
         /// <summary>
@@ -97,7 +80,7 @@ namespace i18n
                 var culture = GetCultureInfoFromLanguage(language);
 
                 // en-US
-                var regional = TryGetTextFor(culture.IetfLanguageTag, key);
+                var regional = i18NMessagesRepository.GetTextFor(culture.IetfLanguageTag, key);
 
                 // Save cycles processing beyond the default; just return the original key
                 //comment out for #8  
@@ -113,11 +96,10 @@ namespace i18n
 //                    return key;
 //                }
 
-
                 // en (and regional was defined)
                 if(!culture.IetfLanguageTag.Equals(culture.TwoLetterISOLanguageName, StringComparison.OrdinalIgnoreCase) && regional == key)
                 {
-                    var global = TryGetTextFor(culture.TwoLetterISOLanguageName, key);
+                    var global = i18NMessagesRepository.GetTextFor(culture.TwoLetterISOLanguageName, key);
                     if(global != key)
                     {
                         return global;
@@ -134,122 +116,18 @@ namespace i18n
             return key;
         }
 
-        public IList<I18NMessage> GetAllText(string language)
+        public IList<I18NMessage> GetAll(string[] language)
         {
-            var culture = GetCultureInfoFromLanguage(language).IetfLanguageTag;
-            var i18NMessages = (List<I18NMessage>) HttpRuntime.Cache["po:culture"];
-            if (i18NMessages == null || i18NMessages.Count == 0)
-            {
-                LoadMessages(culture);
-                i18NMessages = (List<I18NMessage>)HttpRuntime.Cache["po:culture"];
-            }
-            return i18NMessages;
-        }
-
-        private static string TryGetTextFor(string culture, string key)
-        {
-            lock (Sync)
-            {
-                if (HttpRuntime.Cache[string.Format("po:{0}", culture)] != null)
-                {
-                    // This culture is already processed and in memory
-                    return GetTextOrDefault(culture, key);
-                }
-            }
-
-            if(LoadMessages(culture))
-            {
-                return GetTextOrDefault(culture, key);    
-            }
-            
-            // Avoid shredding the disk looking for non-existing files
-            CreateEmptyMessages(culture);
-
-            return key;
-        }
-
-        private static void CreateEmptyMessages(string culture)
-        {
-            lock (Sync)
-            {
-                string directory;
-                string path;
-                GetDirectoryAndPath(culture, out directory, out path);
-
-                if (!Directory.Exists(directory))
-                {
-                    Directory.CreateDirectory(directory);
-                }
-
-                using(var fs = File.CreateText(path))
-                {
-                    fs.Flush();
-                }
-
-                // If the file changes we want to be able to rebuild the index without recompiling
-                HttpRuntime.Cache.Insert(string.Format("po:{0}", culture), new List<I18NMessage>(0), new CacheDependency(path));
-            }
-        }
-
-        private static bool LoadMessages(string culture)
-        {
-            string directory;
-            string path;
-            GetDirectoryAndPath(culture, out directory, out path);
-
-            if (!File.Exists(path))
-            {
-                return false;
-            }
-
-            LoadFromDiskAndCache(culture, path);
-            return true;
-        }
-
-        private static void GetDirectoryAndPath(string culture, out string directory, out string path)
-        {
-            directory = string.Format("{0}/locale/{1}", HostingEnvironment.ApplicationPhysicalPath, culture);
-            path = Path.Combine(directory, "messages.po");
-        }
-
-        private static void LoadFromDiskAndCache(string culture, string path)
-        {
-            lock (Sync)
-            {
-                var messages = new I18NPoFileParser().Parse(path);
-                // If the file changes we want to be able to rebuild the index without recompiling
-                HttpRuntime.Cache.Insert(string.Format("po:{0}", culture), messages, new CacheDependency(path));
-            }
-        }
-
-        private static string GetTextOrDefault(string culture, string key)
-        {
-            lock (Sync)
-            {
-                var messages = (List<I18NMessage>) HttpRuntime.Cache[string.Format("po:{0}", culture)];
-
-                if (!messages.Any())
-                {
-                    return key;
-                }
-
-                var matched = messages.SingleOrDefault(m => m.MsgId.Equals(key));
-
-                if (matched == null)
-                {
-                    return key;
-                }
-
-                return string.IsNullOrWhiteSpace(matched.MsgStr) ? key : matched.MsgStr;
-            }
+            var culture = GetBestAvailableLanguageFrom(language);
+            return i18NMessagesRepository.Get(culture);
         }
 
         private static CultureInfo GetCultureInfoFromLanguage(string language)
         {
             var semiColonIndex = language.IndexOf(';');
-            return semiColonIndex > -1
-                       ? new CultureInfo(language.Substring(0, semiColonIndex), true)
-                       : new CultureInfo(language, true);
+            language = semiColonIndex > -1 ? language.Substring(0, semiColonIndex) : language;
+            language = CultureInfo.CreateSpecificCulture(language).Name;
+            return new CultureInfo(language, true);
         }
     }
 }

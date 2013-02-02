@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
+using i18n.Core.Models;
 
 namespace i18n
 {
@@ -27,6 +28,11 @@ namespace i18n
         public virtual IHtmlString _(string text)
         {
             return new MvcHtmlString(_session.GetText(HttpContext, text));
+        }
+
+        public virtual IList<I18NMessage> _All()
+        {
+            return _session.GetAll(HttpContext);
         }
     }
 }

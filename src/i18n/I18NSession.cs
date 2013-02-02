@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Web;
+using i18n.Core;
+using i18n.Core.Models;
 
 namespace i18n
 {
@@ -92,6 +94,21 @@ namespace i18n
                 url = url.Substring(0, url.Length - 1);
             }
             return url;
+        }
+
+        public IList<I18NMessage> GetAll(HttpContextBase context)
+        {
+            return localizingService.GetAll(GetAvailableUserLanguages(context));
+        }
+
+        private static string[] GetAvailableUserLanguages(HttpContextBase context)
+        {
+            var stored = GetLanguageFromSession(context);
+            if (stored != null)
+            {
+                return new[] {stored};
+            }
+            return context.Request.UserLanguages;
         }
     }
 }
