@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using Xunit;
 using i18n.Parsers;
 
@@ -7,30 +9,116 @@ namespace i18n.Tests.Parsers
 {
     public class I18NPoFileParserFacts
     {
-        [Fact]
-        public void should_parse_po_file_correctly()
+        private readonly I18NPoFileParser parser;
+        const string testPoFileName = "test.po";
+        private readonly string poFileRuntimePath;
+
+        public I18NPoFileParserFacts()
         {
-            var parser = new I18NPoFileParser();
-            var path = GetDir("locale/en-US/messages.po");
-            var result = parser.Parse(path);
-
-            var i18NMessage = new I18NMessage("Afghanistan", "Afghanistan");
-            const string longMessage = @"Depending on your answers, myVisas will be automatically tailored to your situation and filter sections that you are only required th complete, by either adding or removing sections and questions from the questionnaire.";
-            var longI18NMessage = new I18NMessage(longMessage, longMessage);
-
-            Assert.Equal(7, result.Count);
-
-            Assert.True(result.Contains(i18NMessage));
-            Assert.True(result.Contains(longI18NMessage));
+            parser = new I18NPoFileParser();
+            poFileRuntimePath = GetRuntimePath(testPoFileName);
         }
 
-        private string GetDir(string relativePath = "")
+        [Fact]
+        public void should_return_correct_msgid_and_msgstr_when_parse_po_file_with_translation()
         {
-            string codeBase = typeof (I18NPoFileParserFacts).Assembly.CodeBase;
-            var uriBuilder = new UriBuilder(codeBase);
-            string path = Uri.UnescapeDataString(uriBuilder.Path);
-            string directoryName = Path.GetDirectoryName(path);
+            const string poFileContent = "#: .\\test.html:3\nmsgid \"translation key\"\nmsgstr \"translation\"";
+            CreatePoFile(testPoFileName, poFileContent);
+
+            var result = parser.Parse(poFileRuntimePath);
+            Assert.Equal(1, result.Count);
+
+            var expectedI18NMessages = new[]{new I18NMessage("translation key", "translation")};
+            VerifyResult(expectedI18NMessages, result);
+
+            Dispose(poFileRuntimePath);
+        }
+
+        [Fact]
+        public void should_parse_translation_key_in_multiple_line()
+        {
+            const string content = @"#: .\\test.html:22
+msgid """"
+""one line ""
+""another line ""
+msgstr """"";
+            CreatePoFile(testPoFileName, content);
+
+            var result = parser.Parse(poFileRuntimePath);
+
+            Assert.Equal(1, result.Count);
+
+            var expectedI18NMessages = new[]{new I18NMessage("one line another line ", "")};
+            VerifyResult(expectedI18NMessages, result);
+
+            Dispose(poFileRuntimePath);
+        }
+
+        [Fact]
+        public void should_return_correct_result_when_parse_multiple_translation_block_with_blank_line_inside()
+        {
+            const string content = @"..\\test.html:15
+msgid ""welcome""
+msgstr """"
+
+#: ..\\test.html:20
+#: ..\\test-another.html:22
+msgid ""another.""
+msgstr ""another's translation""
+
+#: ..\\test.html:45
+#, fuzzy
+msgid """"
+""For ease of completing this questionnaire, you have to answer some mandatory ""
+""questions before starting.""
+msgstr """"
+
+";
+            CreatePoFile(testPoFileName, content);
+
+            var result = parser.Parse(poFileRuntimePath);
+
+            Assert.Equal(3, result.Count);
+
+            var expectedI18NMessages = new[]
+                {
+                    new I18NMessage("welcome", ""), 
+                    new I18NMessage("another.", "another's translation"), 
+                    new I18NMessage("For ease of completing this questionnaire, you have to answer some mandatory questions before starting.", "")
+                };
+
+            VerifyResult(expectedI18NMessages, result);
+
+            Dispose(poFileRuntimePath);
+        }
+
+        private static void VerifyResult(I18NMessage[] expectedI18NMessages, IList<I18NMessage> result)
+        {
+            for (int i = 0; i < expectedI18NMessages.Length; i++)
+            {
+                Assert.Equal(expectedI18NMessages[i], result[i]);
+            }
+        }
+
+        private string GetRuntimePath(string relativePath)
+        {
+            var codeBase = typeof (I18NPoFileParserFacts).Assembly.CodeBase;
+            var directoryName1 = Path.GetDirectoryName(Uri.UnescapeDataString(new UriBuilder(codeBase).Path));
+            var directoryName = directoryName1;
             return Path.Combine(directoryName, relativePath);
+        }
+
+        private void CreatePoFile(string path, string content)
+        {
+            using (var fileStream = new FileStream(path, FileMode.Create))
+            {
+                fileStream.Write(Encoding.UTF8.GetBytes(content), 0, Encoding.UTF8.GetByteCount(content));
+            }
+        }
+
+        private void Dispose(string path)
+        {
+           File.Delete(path);
         }
     }
 }

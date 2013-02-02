@@ -2,11 +2,15 @@
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace i18n.Parsers
 {
     public class I18NPoFileParser
     {
+        private const string TRANSLATION_KEY = "msgid";
+        private const string TRANSLATION = "msgstr";
+
         public IList<I18NMessage> Parse(string path)
         {
             var i18NMessages = new List<I18NMessage>();
@@ -14,19 +18,14 @@ namespace i18n.Parsers
             {
                 using (var fs = new StreamReader(fileStream, Encoding.Default))
                 {
-                    string line = fs.ReadLine();
+                    var line = fs.ReadLine();
                     while (line != null)
                     {
                         line = line.Trim();
-                        if (line.StartsWith("msgid"))
+                        if (line.StartsWith(TRANSLATION_KEY))
                         {
-                            var msgId = ParseTranslation(ref line, fs, "msgid");
-                            var msgStr = ParseTranslation(ref line, fs, "msgstr");
-                            if (string.IsNullOrEmpty(msgStr))
-                            {
-                                msgStr = msgId;
-                            }
-                            i18NMessages.Add(new I18NMessage(msgId, msgStr));    
+                            var result = new[] {TRANSLATION_KEY, TRANSLATION}.ToList().Select(s => ParseTranslation(ref line, fs, s)).ToArray();
+                            i18NMessages.Add(new I18NMessage(result[0], result[1]));    
                         }
                         else
                         {
