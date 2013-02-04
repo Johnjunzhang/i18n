@@ -2,7 +2,6 @@
 using System.IO;
 using System.Text;
 using Xunit;
-using i18n.Core;
 using i18n.Core.Models;
 using i18n.Core.Parsers;
 

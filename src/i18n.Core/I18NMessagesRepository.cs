@@ -22,7 +22,7 @@ namespace i18n.Core
         {
             lock (Sync)
             {
-                return i18NMessagesCache.Get(culture.ToLowerInvariant(), key);
+                return i18NMessagesCache.Get(culture, key);
             }
         }
 
@@ -30,7 +30,7 @@ namespace i18n.Core
         {
             lock (Sync)
             {
-                return i18NMessagesCache.Get(culture.ToLowerInvariant());
+                return i18NMessagesCache.Get(culture);
             }
         }
 

@@ -11,7 +11,8 @@ namespace i18n.Core
     {
         private readonly IPoFileParser parser;
         private readonly string rootPath;
-        private readonly IDictionary<string, IList<I18NMessage>> i18NMessagesCache = new Dictionary<string, IList<I18NMessage>>();
+        private readonly IDictionary<string, IList<I18NMessage>> i18NMessagesCache = 
+            new Dictionary<string, IList<I18NMessage>>(StringComparer.InvariantCultureIgnoreCase);
 
         public I18NMessagesCache(IPoFileParser parser, string rootPath)
         {
