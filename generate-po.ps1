@@ -57,15 +57,12 @@ if( $inputFiles){
     iex "$getTextPath\xgettext.exe -LC# -k_ --omit-header --from-code=UTF-8 -o$template $inputFiles"
 }
 
-Get-Directory $localePath |  
-% {
+Get-Directory $localePath |  % {
     $dir = $_.FullName
-    $result = Test-Path "$dir\messages.po"
-    if( -not $result) {
-        Copy-Item $template "$dir\messages.po"
-    } 
-    else {
-        iex "$getTextPath\msgmerge.exe -U $dir\messages.po $template"       
+    $target = "$dir\messages.po"
+    if(Test-Path $target) {
+        & "$getTextPath\msgmerge.exe" -U $target $template
+    } else {
+        & "$getTextPath\msginit.exe" -i $template -l $_.BaseName '--no-translator' -o $target
     }
-    
 }
