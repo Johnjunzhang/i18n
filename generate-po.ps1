@@ -40,7 +40,7 @@ Function Get-Files {
 
 Function Test-IsExcluded($path){
     foreach($excludeFolder in $excludeFolders){
-        if ($path.StartsWith($excludeFolder)) {
+        if ($path.StartsWith($excludeFolder, [System.StringComparison]::InvariantCultureIgnoreCase)) {
             return $true
         }
     }

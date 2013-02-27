@@ -1,1 +1,1 @@
-"src\.nuget\NuGet.exe" pack i18n.nuspec -version 1.0.6.8 -NoPackageAnalysis
+".nuget\NuGet.exe" pack i18n.nuspec -version 1.0.6.12 -NoPackageAnalysis
