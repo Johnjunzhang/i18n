@@ -39,6 +39,9 @@ Function Get-Files {
 }
 
 Function Test-IsExcluded($path){
+    if( -not $path ){
+        return $true
+    }
     foreach($excludeFolder in $excludeFolders){
         if ($path.StartsWith($excludeFolder, [System.StringComparison]::InvariantCultureIgnoreCase)) {
             return $true
