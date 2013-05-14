@@ -1,7 +1,7 @@
 # throw "Here specify environment related settings which will be visible for all tasks, comment this line after all set. "
 @{
     'package' = @{
-        "version" = "1.0.6.11"
+        "version" = "1.0.6.14"
         "store" = {
             param($pkgs)
             if (Test-Path "$packageOutputDir\pkgs.txt") {
