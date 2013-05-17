@@ -18,7 +18,7 @@ namespace i18n
         
         public IHtmlString _(string text)
         {
-            return new MvcHtmlString(_session.GetText(Context, text));
+            return new MvcHtmlString(HttpUtility.HtmlEncode(_session.GetText(Context, text)));
         }
     }
 
@@ -37,7 +37,7 @@ namespace i18n
 
         public IHtmlString _(string text)
         {
-            return new MvcHtmlString(_session.GetText(Context, text));
+            return new MvcHtmlString(HttpUtility.HtmlEncode(_session.GetText(Context, text)));
         }
     }
 }
