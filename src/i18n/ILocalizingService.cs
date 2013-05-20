@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using i18n.Core;
 using i18n.Core.Models;
 
 namespace i18n
@@ -24,6 +23,6 @@ namespace i18n
         /// <returns></returns>
         string GetText(string key, string[] languages);
 
-        IList<I18NMessage> GetAll(string[] language);
+        IList<I18NMessage> GetAll(string[] languages);
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace i18n.Core.Parsers
+namespace i18n.Core.PoParsers
 {
     public class ChangeListParser
     {

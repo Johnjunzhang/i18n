@@ -5,11 +5,11 @@ using System.Text.RegularExpressions;
 using System.Linq;
 using i18n.Core.Models;
 
-namespace i18n.Core.Parsers
+namespace i18n.Core.PoParsers
 {
     public interface IPoFileParser
     {
-        IList<I18NMessage> Parse(string path);
+        IDictionary<string, I18NMessage> Parse(string path);
     }
 
     public class I18NPoFileParser : IPoFileParser
@@ -17,27 +17,32 @@ namespace i18n.Core.Parsers
         private const string TRANSLATION_KEY = "msgid";
         private const string TRANSLATION = "msgstr";
 
-        public IList<I18NMessage> Parse(string path)
+        public IDictionary<string, I18NMessage> Parse(string path)
         {
-            var i18NMessages = new List<I18NMessage>();
-            using (var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read))
+            var i18NMessages = new Dictionary<string, I18NMessage>();
+            if (File.Exists(path))
             {
-                using (var fs = new StreamReader(fileStream, Encoding.Default))
+                using (var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read))
                 {
-                    var line = fs.ReadLine();
-                    while (line != null)
+                    using (var fs = new StreamReader(fileStream, Encoding.Default))
                     {
-                        line = line.Trim();
-                        if (line.StartsWith(TRANSLATION_KEY))
+                        var line = fs.ReadLine();
+                        while (line != null)
                         {
-                            var result = new[] {TRANSLATION_KEY, TRANSLATION}.ToList().Select(s => ParseTranslation(ref line, fs, s)).ToArray();
-                            i18NMessages.Add(new I18NMessage(result[0], result[1]));    
+                            line = line.Trim();
+                            if (line.StartsWith(TRANSLATION_KEY))
+                            {
+                                var result =
+                                    new[] {TRANSLATION_KEY, TRANSLATION}.ToList()
+                                                                        .Select(s => ParseTranslation(ref line, fs, s))
+                                                                        .ToArray();
+                                i18NMessages.Add(result[0], new I18NMessage(result[0], result[1]));
+                            }
+                            else
+                            {
+                                line = fs.ReadLine();
+                            }
                         }
-                        else
-                        {
-                            line = fs.ReadLine();
-                        }
-                        
                     }
                 }
             }

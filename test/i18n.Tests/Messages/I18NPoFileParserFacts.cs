@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Xunit;
 using i18n.Core.Models;
-using i18n.Core.Parsers;
+using i18n.Core.PoParsers;
 
 namespace i18n.Tests.Messages
 {
@@ -25,7 +26,7 @@ namespace i18n.Tests.Messages
             const string poFileContent = "#: .\\test.html:3\nmsgid \"translation key\"\nmsgstr \"translation\"";
             CreatePoFile(testPoFileName, poFileContent);
 
-            var result = parser.Parse(poFileRuntimePath);
+            var result = (IList<I18NMessage>) parser.Parse(poFileRuntimePath).Values.ToList();
             Assert.Equal(1, result.Count);
 
             var expectedI18NMessages = new[]{new I18NMessage("translation key", "translation")};
@@ -44,7 +45,7 @@ msgid """"
 msgstr """"";
             CreatePoFile(testPoFileName, content);
 
-            var result = parser.Parse(poFileRuntimePath);
+            var result = (IList<I18NMessage>) parser.Parse(poFileRuntimePath).Values.ToList();
 
             Assert.Equal(1, result.Count);
 
@@ -76,7 +77,7 @@ msgstr """"
 ";
             CreatePoFile(testPoFileName, content);
 
-            var result = parser.Parse(poFileRuntimePath);
+            var result = (IList<I18NMessage>) parser.Parse(poFileRuntimePath).Values.ToList();
 
             Assert.Equal(3, result.Count);
 

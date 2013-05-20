@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using i18n.Core.Models;
-using i18n.Core.Parsers;
+using i18n.Core.PoParsers;
 
 namespace i18n.Core
 {
@@ -11,8 +12,8 @@ namespace i18n.Core
     {
         private readonly IPoFileParser parser;
         private readonly string rootPath;
-        private readonly IDictionary<string, IList<I18NMessage>> i18NMessagesCache = 
-            new Dictionary<string, IList<I18NMessage>>(StringComparer.InvariantCultureIgnoreCase);
+        private readonly IDictionary<string, IDictionary<string, I18NMessage>> i18NMessagesCache = 
+            new Dictionary<string, IDictionary<string, I18NMessage>>(StringComparer.InvariantCultureIgnoreCase);
 
         public I18NMessagesCache(IPoFileParser parser, string rootPath)
         {
@@ -20,7 +21,7 @@ namespace i18n.Core
             this.rootPath = rootPath;
         }
 
-        public IList<I18NMessage> Get(string culture)
+        public IDictionary<string, I18NMessage> Get(string culture)
         {
             if (!i18NMessagesCache.ContainsKey(culture))
             {
@@ -29,26 +30,32 @@ namespace i18n.Core
             return i18NMessagesCache[culture];
         }
 
-        public string Get(string culture, string key)
+        private string GetByCultureStr(string culture, string key)
         {
-            var i18NMessage = Get(culture).FirstOrDefault(m => m.MsgId.Equals(key));
-            if (i18NMessage != null && !string.IsNullOrWhiteSpace(i18NMessage.MsgStr))
+            var cultureMessages = Get(culture);
+            if (cultureMessages.ContainsKey(key))
             {
+                var i18NMessage = cultureMessages[key];
                 return i18NMessage.MsgStr;
             }
-            return key;
+            return string.Empty;
+        }
+
+        public string Get(CultureInfo culture, string key)
+        {
+            var msg = GetByCultureStr(culture.Name, key);
+            if (string.IsNullOrEmpty(msg))
+            {
+                msg = GetByCultureStr(culture.TwoLetterISOLanguageName, key);
+            }
+            return msg;
         }
 
         private void UpdateI18NCache(string culture)
         {
             var cultureBasedPoFile = Path.Combine(rootPath, "locale", culture, "messages.po");
-            var result = parser.Parse(cultureBasedPoFile).ToList().Select(Selector).ToList();
+            var result = parser.Parse(cultureBasedPoFile);
             i18NMessagesCache[culture] = result;
-        }
-
-        private static Func<I18NMessage, I18NMessage> Selector
-        {
-            get { return message => string.IsNullOrEmpty(message.MsgStr) ? new I18NMessage(message.MsgId, message.MsgId) : message; }
         }
 
         public void Reset(string[] changedCultures)

@@ -55,6 +55,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Facts.cs" />
     <Compile Include="Messages\ChangeListParserFacts.cs" />
     <Compile Include="Messages\I18NMessagesCacheFacts.cs" />
     <Compile Include="Messages\I18NPoFileParserFacts.cs" />

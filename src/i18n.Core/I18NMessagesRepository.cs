@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using i18n.Core.Models;
-using i18n.Core.Parsers;
+using i18n.Core.PoParsers;
 
 namespace i18n.Core
 {
@@ -18,15 +19,7 @@ namespace i18n.Core
             poFileWatcher.Begin();
         }
 
-        public string GetTextFor(string culture, string key)
-        {
-            lock (Sync)
-            {
-                return i18NMessagesCache.Get(culture, key);
-            }
-        }
-
-        public IList<I18NMessage> Get(string culture)
+        public IDictionary<string,I18NMessage> Get(string culture)
         {
             lock (Sync)
             {
@@ -40,6 +33,38 @@ namespace i18n.Core
             {
                 i18NMessagesCache.Reset(changedCultures);
             }
+        }
+
+        public string FindByCultures(string key, IEnumerable<CultureInfo> cultureInfos)
+        {
+            lock (Sync)
+            {
+                foreach (var culture in cultureInfos)
+                {
+                    var regional = i18NMessagesCache.Get(culture, key);
+                    if (!string.IsNullOrEmpty(regional))
+                    {
+                        return regional;
+                    }
+                }
+            }
+            return key;
+        }
+
+        public string GetBest(IEnumerable<CultureInfo> cultureInfos, string @default)
+        {
+            foreach (var culture in cultureInfos)
+            {
+                if (Get(culture.Name).Count > 0)
+                {
+                    return culture.Name;
+                }
+                if (Get(culture.TwoLetterISOLanguageName).Count > 0)
+                {
+                    return culture.TwoLetterISOLanguageName;
+                }
+            }
+            return @default;
         }
     }
 }
