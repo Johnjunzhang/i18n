@@ -1,14 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2010
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{665DB625-BBFD-4E61-89F5-76E9347E9E66}"
-	ProjectSection(SolutionItems) = preProject
-		..\i18n.nuspec = ..\i18n.nuspec
-		..\LICENSE.md = ..\LICENSE.md
-		..\pack-nuget.bat = ..\pack-nuget.bat
-		..\README.md = ..\README.md
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B0CA23EC-9104-436B-832A-8C3BB8ED8495}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
@@ -16,11 +8,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B0CA23
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{2FF21CC4-D33E-4A0F-A1A3-B604571D47B8}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "i18n", "src\i18n\i18n.csproj", "{E7A9BBA3-8A95-492C-8806-4DE63C1DBA06}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "i18n.MVC3", "src\i18n.MVC3\i18n.MVC3.csproj", "{83841C25-A06E-4760-9407-92E445F16EA5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "i18n.MVC4", "src\i18n.MVC4\i18n.MVC4.csproj", "{6164A297-9111-4D8A-9889-B4B6C02BC387}"
 EndProject
@@ -42,12 +30,6 @@ Global
 		{E7A9BBA3-8A95-492C-8806-4DE63C1DBA06}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7A9BBA3-8A95-492C-8806-4DE63C1DBA06}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E7A9BBA3-8A95-492C-8806-4DE63C1DBA06}.Release|x86.ActiveCfg = Release|Any CPU
-		{83841C25-A06E-4760-9407-92E445F16EA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{83841C25-A06E-4760-9407-92E445F16EA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{83841C25-A06E-4760-9407-92E445F16EA5}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{83841C25-A06E-4760-9407-92E445F16EA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{83841C25-A06E-4760-9407-92E445F16EA5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{83841C25-A06E-4760-9407-92E445F16EA5}.Release|x86.ActiveCfg = Release|Any CPU
 		{6164A297-9111-4D8A-9889-B4B6C02BC387}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6164A297-9111-4D8A-9889-B4B6C02BC387}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6164A297-9111-4D8A-9889-B4B6C02BC387}.Debug|x86.ActiveCfg = Debug|Any CPU

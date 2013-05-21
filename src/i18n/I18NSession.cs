@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Web;
-using i18n.Core;
 using i18n.Core.Models;
 
 namespace i18n
@@ -15,7 +14,7 @@ namespace i18n
 
         public I18NSession()
         {
-            localizingService = DependencyResolver.LocalizingService;
+            localizingService = new LocalizingService(I18NSessionFactory.CreateRepository());
         }
 
         public virtual void Set(HttpContextBase context, string language)

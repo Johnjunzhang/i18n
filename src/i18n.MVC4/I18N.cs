@@ -16,7 +16,6 @@ namespace i18n
         static I18N()
         {
             DefaultTwoLetterISOLanguageName = "en";
-            DependencyResolver.Container.Register<IHtmlStringFormatter>(r => new MvcHtmlStringFormatter());
         }
         
         /// <summary>

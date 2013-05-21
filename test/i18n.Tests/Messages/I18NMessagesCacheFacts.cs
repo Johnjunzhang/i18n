@@ -18,7 +18,7 @@ namespace i18n.Tests.Messages
             var parser = new Mock<IPoFileParser>();
             var expectedI18NMessages = new[] { new I18NMessage("translation key", "translation key") };
             var localeEnUsMessagesPo = Path.Combine(GetRuntimePath(),"locale\\en-US\\messages.po");
-            parser.Setup(p => (IList<I18NMessage>) p.Parse(localeEnUsMessagesPo).Values.ToList()).Returns(expectedI18NMessages);
+            parser.Setup(p => p.Parse(localeEnUsMessagesPo)).Returns(expectedI18NMessages.ToDictionary(d=> d.MsgId));
 
             var i18NMessagesCache = new I18NMessagesCache(parser.Object, GetRuntimePath());
             var actualI18NMessages = i18NMessagesCache.Get("en-US");
@@ -32,7 +32,7 @@ namespace i18n.Tests.Messages
              var parser = new Mock<IPoFileParser>();
              var expectedI18NMessages = new[] { new I18NMessage("translation key", "translation key") };
             var localeEnUsMessagesPo = Path.Combine(GetRuntimePath(),"locale\\en-US\\messages.po");
-            parser.Setup(p => (IList<I18NMessage>) p.Parse(localeEnUsMessagesPo).Values.ToList()).Returns(expectedI18NMessages);
+            parser.Setup(p => p.Parse(localeEnUsMessagesPo)).Returns(expectedI18NMessages.ToDictionary(d => d.MsgId));
 
             var i18NMessagesCache = new I18NMessagesCache(parser.Object, GetRuntimePath());
 
@@ -41,7 +41,7 @@ namespace i18n.Tests.Messages
             VerifyResult(expectedI18NMessages, actualI18NMessages);
 
             expectedI18NMessages = new[] { new I18NMessage("translation key", "new translation") };
-            parser.Setup(p => (IList<I18NMessage>) p.Parse(localeEnUsMessagesPo).Values.ToList()).Returns(expectedI18NMessages);
+            parser.Setup(p => p.Parse(localeEnUsMessagesPo)).Returns(expectedI18NMessages.ToDictionary(d => d.MsgId));
 
             string[] changedCultures = {"en-US"};
             i18NMessagesCache.Reset(changedCultures);
@@ -56,11 +56,10 @@ namespace i18n.Tests.Messages
             var parser = new Mock<IPoFileParser>();
             var expectedI18NMessages = new[] { new I18NMessage("translation key", "translation vlaue") };
             var localeEnUsMessagesPo = Path.Combine(GetRuntimePath(), "locale\\en-US\\messages.po");
-            parser.Setup(p => (IList<I18NMessage>) p.Parse(localeEnUsMessagesPo).Values.ToList()).Returns(expectedI18NMessages);
+            parser.Setup(p =>p.Parse(localeEnUsMessagesPo)).Returns(expectedI18NMessages.ToDictionary(d => d.MsgId));
 
             var i18NMessagesCache = new I18NMessagesCache(parser.Object, GetRuntimePath());
-
-            var result = i18NMessagesCache.Get(new CultureInfo("en-US"), "translation key");
+            var result = new I18NMessagesRepository(i18NMessagesCache).Get(new CultureInfo("en-US"), "translation key");
 
             Assert.Equal("translation vlaue", result);
         }

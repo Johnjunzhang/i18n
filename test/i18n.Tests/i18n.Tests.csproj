@@ -55,11 +55,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Facts.cs" />
     <Compile Include="Messages\ChangeListParserFacts.cs" />
     <Compile Include="Messages\I18NMessagesCacheFacts.cs" />
     <Compile Include="Messages\I18NPoFileParserFacts.cs" />
-    <Compile Include="IoCContainerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestHelper.cs" />
   </ItemGroup>

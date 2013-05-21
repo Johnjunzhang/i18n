@@ -8,19 +8,19 @@
 
         public string Name
         {
-            get { return _(_name).ToHtmlString(); }
+            get { return _(_name); }
             set { _name = value; }
         }
 
         public string Prompt
         {
-            get { return _(_prompt).ToHtmlString(); }
+            get { return _(_prompt); }
             set { _prompt = value; }
         }
 
         public string Description
         {
-            get { return _(_description).ToHtmlString(); }
+            get { return _(_description); }
             set { _description = value; }
         }
     }

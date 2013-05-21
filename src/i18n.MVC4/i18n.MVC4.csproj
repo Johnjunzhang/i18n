@@ -54,31 +54,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\i18n.MVC3\Extensions.cs">
-      <Link>Extensions.cs</Link>
-    </Compile>
-    <Compile Include="..\i18n.MVC3\I18N.cs">
-      <Link>I18N.cs</Link>
-    </Compile>
-    <Compile Include="..\i18n.MVC3\I18NController.cs">
-      <Link>I18NController.cs</Link>
-    </Compile>
-    <Compile Include="..\i18n.MVC3\I18NWebViewPage.cs">
-      <Link>I18NWebViewPage.cs</Link>
-    </Compile>
-    <Compile Include="..\i18n.MVC3\LanguageFilter.cs">
-      <Link>LanguageFilter.cs</Link>
-    </Compile>
-    <Compile Include="..\i18n.MVC3\LanguageRouteDecorator.cs">
-      <Link>LanguageRouteDecorator.cs</Link>
-    </Compile>
-    <Compile Include="..\i18n.MVC3\MvcHtmlStringFormatter.cs">
-      <Link>MvcHtmlStringFormatter.cs</Link>
-    </Compile>
-    <Compile Include="..\i18n.MVC3\RouteDecoratorBase.cs">
-      <Link>RouteDecoratorBase.cs</Link>
-    </Compile>
+    <Compile Include="Extensions.cs" />
+    <Compile Include="I18N.cs" />
+    <Compile Include="I18NController.cs" />
+    <Compile Include="I18NWebViewPage.cs" />
+    <Compile Include="LanguageFilter.cs" />
+    <Compile Include="LanguageRouteDecorator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RouteDecoratorBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\i18n.Core\i18n.Core.csproj">

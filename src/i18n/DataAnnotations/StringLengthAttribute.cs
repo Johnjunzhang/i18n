@@ -11,15 +11,15 @@ namespace i18n.DataAnnotations
             _session = new I18NSession();
         }
 
-        public virtual IHtmlString _(string text)
+        public virtual string _(string text)
         {
-            return new HtmlString(_session.GetText(HttpContext.Current, text));
+            return _session.GetText(HttpContext.Current, text);
         }
 
         public override string FormatErrorMessage(string name)
         {
             var formatted = base.FormatErrorMessage(name);
-            return _(formatted).ToHtmlString();
+            return _(formatted);
         }
     }
 }

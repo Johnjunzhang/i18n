@@ -1,51 +1,52 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using i18n.Core.Models;
-using i18n.Core.PoParsers;
 
 namespace i18n.Core
 {
     public class I18NMessagesRepository
     {
-        private static readonly object Sync = new object();
         private readonly I18NMessagesCache i18NMessagesCache;
 
-        public I18NMessagesRepository(string rootPath)
+        public I18NMessagesRepository(I18NMessagesCache i18NMessagesCache)
         {
-            i18NMessagesCache = new I18NMessagesCache(new I18NPoFileParser(), rootPath);
-            var poFileWatcher = new PoFileWatcher(Path.Combine(rootPath, "locale"));
-            poFileWatcher.OnChange += (o, e) => Reset(new ChangeListParser(e.ChangeList).GetChangedCultures());
-            poFileWatcher.Begin();
+            this.i18NMessagesCache = i18NMessagesCache;
         }
 
-        public IDictionary<string,I18NMessage> Get(string culture)
+        public IDictionary<string, I18NMessage> Get(string culture)
         {
-            lock (Sync)
-            {
-                return i18NMessagesCache.Get(culture);
-            }
+            return i18NMessagesCache.Get(culture);
         }
 
-        public void Reset(string[] changedCultures)
+        public string Get(CultureInfo culture, string key)
         {
-            lock (Sync)
+            var msg = GetByCultureStr(culture.Name, key);
+            if (string.IsNullOrEmpty(msg))
             {
-                i18NMessagesCache.Reset(changedCultures);
+                msg = GetByCultureStr(culture.TwoLetterISOLanguageName, key);
             }
+            return msg;
+        }
+
+        private string GetByCultureStr(string culture, string key)
+        {
+            var i18NMessages = Get(culture);
+            if (i18NMessages.ContainsKey(key))
+            {
+                var i18NMessage = i18NMessages[key];
+                return i18NMessage.MsgStr;
+            }
+            return string.Empty;
         }
 
         public string FindByCultures(string key, IEnumerable<CultureInfo> cultureInfos)
         {
-            lock (Sync)
+            foreach (var culture in cultureInfos)
             {
-                foreach (var culture in cultureInfos)
+                var regional = Get(culture, key);
+                if (!string.IsNullOrEmpty(regional))
                 {
-                    var regional = i18NMessagesCache.Get(culture, key);
-                    if (!string.IsNullOrEmpty(regional))
-                    {
-                        return regional;
-                    }
+                    return regional;
                 }
             }
             return key;

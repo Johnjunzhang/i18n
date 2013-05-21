@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
 using System.Web.Routing;
+using i18n.Core;
 
 namespace i18n
 {
@@ -18,7 +19,7 @@ namespace i18n
         public LanguageFilter()
         {
             _session = new I18NSession();
-            _service = DependencyResolver.LocalizingService;
+            _service = new LocalizingService(I18NSessionFactory.CreateRepository());
         }
 
         /// <summary>
