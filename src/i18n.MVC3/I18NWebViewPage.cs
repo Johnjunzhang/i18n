@@ -18,7 +18,7 @@ namespace i18n
         
         public IHtmlString _(string text)
         {
-            return new MvcHtmlString(HttpUtility.HtmlEncode(_session.GetText(Context, text)));
+            return MvcHtmlString.Create(_session.GetText(Context, text));
         }
     }
 
