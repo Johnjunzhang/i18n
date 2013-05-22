@@ -12,7 +12,7 @@ namespace i18n.Core.PoParsers
         IDictionary<string, I18NMessage> Parse(string path);
     }
 
-    public class I18NPoFileParser : IPoFileParser
+    internal class I18NPoFileParser : IPoFileParser
     {
         private const string TRANSLATION_KEY = "msgid";
         private const string TRANSLATION = "msgstr";

@@ -2,9 +2,6 @@
 
 namespace i18n.Core.Models
 {
-    /// <summary>
-    /// A localized message residing in a PO resource file
-    /// </summary>
     public class I18NMessage
     {
         public string MsgId { get; private set; }

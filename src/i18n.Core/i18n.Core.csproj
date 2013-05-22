@@ -34,7 +34,8 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>i18n.Core.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -46,16 +47,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="I18NFactory.cs" />
+    <Compile Include="ILocalizingService.cs" />
+    <Compile Include="LocalizingService.cs" />
     <Compile Include="PoParsers\ChangeListParser.cs" />
     <Compile Include="Models\I18NMessage.cs" />
-    <Compile Include="I18NMessagesCache.cs" />
-    <Compile Include="I18NMessagesRepository.cs" />
+    <Compile Include="GenericCache.cs" />
     <Compile Include="PoParsers\I18NPoFileParser.cs" />
     <Compile Include="PoFileWatcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="i18n.Core.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -2,7 +2,7 @@
 
 namespace i18n.Core.PoParsers
 {
-    public class ChangeListParser
+    internal class ChangeListParser
     {
         private readonly string[] changeList;
 
