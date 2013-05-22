@@ -9,9 +9,8 @@ namespace i18n.Tests
         [Fact]
         public void should_return_keys_when_no_translation()
         {
-            var i18NFactory = new I18NFactory(TestHelper.GetRuntimePath());
-
-            var repository = i18NFactory.Create();
+            I18NFactory.Init(TestHelper.GetRuntimePath());
+            var repository = I18NFactory.Default;
             var result = repository.GetAll(new []{"en-US"}).ToDictionary(m => m.MsgId);
 
             Assert.Equal("hasTranslation", result["hasTranslation"].MsgId);

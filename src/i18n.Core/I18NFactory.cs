@@ -5,46 +5,40 @@ using i18n.Core.PoParsers;
 
 namespace i18n.Core
 {
-    public class I18NFactory : IDisposable
+    public class I18NFactory 
     {
-        private readonly string localePath;
-        private static Lazy<I18NFactory> @default;
-        private readonly GenericCache<IDictionary<string, I18NMessage>> genericCache;
-        private readonly PoFileWatcher poFileWatcher;
-
-        public I18NFactory(string localePath)
-        {
-            this.localePath = localePath;
-            poFileWatcher = new PoFileWatcher(localePath);
-            genericCache = new GenericCache<IDictionary<string, I18NMessage>>();
-            poFileWatcher.OnChange += (o, e) => genericCache.Reset(new ChangeListParser(e.ChangeList).GetChangedCultures());
-        }
+        private static Lazy<ILocalizingService> defaultService;
+        private static volatile ILocalizingService localizingService;
 
         public static void Init(string localePath)
         {
-            @default = new Lazy<I18NFactory>(() => new I18NFactory(localePath), true);
+            defaultService = new Lazy<ILocalizingService>(() =>
+                {
+                    var poFileWatcher = new PoFileWatcher(localePath);
+                    var genericCache = new GenericCache<IDictionary<string, I18NMessage>>();
+                    poFileWatcher.OnChange += (o, e) => genericCache.Reset(new ChangeListParser(e.ChangeList).GetChangedCultures());
+                    return new LocalizingService(genericCache, localePath, new I18NPoFileParser());
+                }, true);
         }
 
         public static ILocalizingService Default
         {
             get
             {
-                if (@default == null)
+                if (localizingService == null)
                 {
-                    throw new Exception("Please init first. ");
+                    if (defaultService == null)
+                    {
+                        throw new Exception("Please init first. ");
+                    }
+                    localizingService = defaultService.Value;                    
                 }
-                return @default.Value.Create();
+                return localizingService;
             }
-        }
-
-        public ILocalizingService Create()
-        {
-            return new LocalizingService(genericCache, localePath, new I18NPoFileParser());
-        }
-
-        public void Dispose()
-        {
-            poFileWatcher.Dispose();
+            set
+            {
+                localizingService = value;
+            }
         }
     }
 }
