@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using i18n.Core.Models;
 using i18n.Core.PoParsers;
 
@@ -23,9 +24,30 @@ namespace i18n.Core
         {
             lock (Sync)
             {
-                return i18NMessagesCache.Get(culture);
+                var i18NMessages = i18NMessagesCache.Get(culture);
+                return FillNotTranslatedMessages(i18NMessages);
             }
         }
+
+        private static IDictionary<string, I18NMessage> FillNotTranslatedMessages(IDictionary<string, I18NMessage> i18NMessages)
+        {
+            var i18NMessagesResult = new Dictionary<string, I18NMessage>();
+
+            foreach (var key in i18NMessages.Keys)
+            {
+                if (string.IsNullOrEmpty(i18NMessages[key].MsgStr))
+                {
+                    var msgId = i18NMessages[key].MsgId;
+                    i18NMessagesResult.Add(key, new I18NMessage(msgId, msgId));
+                }
+                else
+                {
+                    i18NMessagesResult.Add(key, i18NMessages[key]);
+                }
+            }
+            return i18NMessagesResult;
+        }
+
 
         public void Reset(string[] changedCultures)
         {

@@ -1,0 +1,8 @@
+msgid "anything"
+msgstr ""
+
+msgid "notTranslated"
+msgstr ""
+
+msgid "hasTranslation"
+msgstr "translated complete"
