@@ -7,12 +7,12 @@ using i18n.Core.Models;
 
 namespace i18n.Core.PoParsers
 {
-    public interface IPoFileParser
+    internal interface IPoFileParser
     {
         IDictionary<string, I18NMessage> Parse(string path);
     }
 
-    public class I18NPoFileParser : IPoFileParser
+    internal class I18NPoFileParser : IPoFileParser
     {
         private const string TRANSLATION_KEY = "msgid";
         private const string TRANSLATION = "msgstr";

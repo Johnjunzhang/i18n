@@ -1,7 +1,7 @@
 ﻿using Xunit;
 using i18n.Core.PoParsers;
 
-namespace i18n.Tests.Messages
+namespace i18n.Tests
 {
     public class ChangeListParserFacts
     {

@@ -8,8 +8,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B0CA23
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "i18n", "src\i18n\i18n.csproj", "{E7A9BBA3-8A95-492C-8806-4DE63C1DBA06}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "i18n.MVC4", "src\i18n.MVC4\i18n.MVC4.csproj", "{6164A297-9111-4D8A-9889-B4B6C02BC387}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "i18n.Tests", "test\i18n.Tests\i18n.Tests.csproj", "{EA15ECE8-9513-4290-9438-6F70D288BBDD}"
@@ -24,12 +22,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E7A9BBA3-8A95-492C-8806-4DE63C1DBA06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E7A9BBA3-8A95-492C-8806-4DE63C1DBA06}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E7A9BBA3-8A95-492C-8806-4DE63C1DBA06}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{E7A9BBA3-8A95-492C-8806-4DE63C1DBA06}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E7A9BBA3-8A95-492C-8806-4DE63C1DBA06}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E7A9BBA3-8A95-492C-8806-4DE63C1DBA06}.Release|x86.ActiveCfg = Release|Any CPU
 		{6164A297-9111-4D8A-9889-B4B6C02BC387}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6164A297-9111-4D8A-9889-B4B6C02BC387}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6164A297-9111-4D8A-9889-B4B6C02BC387}.Debug|x86.ActiveCfg = Debug|Any CPU

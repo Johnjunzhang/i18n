@@ -7,7 +7,7 @@ using i18n.Core.PoParsers;
 
 namespace i18n.Core
 {
-    public class I18NMessagesCache
+    internal class I18NMessagesCache
     {
         private readonly IPoFileParser parser;
         private readonly string rootPath;

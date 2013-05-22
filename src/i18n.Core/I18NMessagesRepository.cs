@@ -4,7 +4,7 @@ using i18n.Core.Models;
 
 namespace i18n.Core
 {
-    public class I18NMessagesRepository
+    internal class I18NMessagesRepository
     {
         private readonly I18NMessagesCache i18NMessagesCache;
 

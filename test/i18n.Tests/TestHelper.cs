@@ -3,12 +3,13 @@ using System.IO;
 
 namespace i18n.Tests
 {
-    public class TestBase
+    public static class TestHelper
     {
-        protected string GetRuntimePath()
+        public static string GetRuntimePath()
         {
-            var codeBase = typeof(TestBase).Assembly.CodeBase;
+            var codeBase = typeof(TestHelper).Assembly.CodeBase;
             return Path.GetDirectoryName(Uri.UnescapeDataString(new UriBuilder(codeBase).Path));
         } 
+        
     }
 }

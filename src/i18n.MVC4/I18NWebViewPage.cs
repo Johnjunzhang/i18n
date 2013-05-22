@@ -1,34 +1,20 @@
 ﻿using System.Web.Mvc;
 
-namespace i18n
+namespace i18n.Web
 {
-    public abstract class I18NWebViewPage<T> : WebViewPage<T>, ILocalizing
-    {
-        private readonly I18NSession _session;
-
-        protected I18NWebViewPage()
-        {
-            _session = new I18NSession();
-        }
-        
+    public abstract class I18NWebViewPage<T> : WebViewPage<T>
+    {   
         public string _(string text)
         {
-            return _session.GetText(Context, text);
+            return Context.GetText(text);
         }
     }
 
-    public abstract class I18NWebViewPage : WebViewPage, ILocalizing
+    public abstract class I18NWebViewPage : WebViewPage
     {
-        private readonly I18NSession _session;
-
-        protected I18NWebViewPage()
-        {
-            _session = new I18NSession();
-        }
-
         public string _(string text)
         {
-            return _session.GetText(Context, text);
+            return Context.GetText(text);
         }
     }
 }

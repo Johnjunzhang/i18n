@@ -8,7 +8,7 @@ using System.Threading;
 namespace i18n.Core
 {
     [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
-    public class PoFileWatcher : IDisposable
+    internal class PoFileWatcher : IDisposable
     {
         private static readonly TimeSpan CHECK_INTERVAL = new TimeSpan(0, 0, 2);
 
@@ -154,7 +154,7 @@ namespace i18n.Core
         }
     }
 
-    public class FileChangeEventArgs : EventArgs
+    internal class FileChangeEventArgs : EventArgs
     {
         public string[] ChangeList { get; private set; }
 

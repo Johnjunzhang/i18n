@@ -6,9 +6,9 @@ using Xunit;
 using i18n.Core.Models;
 using i18n.Core.PoParsers;
 
-namespace i18n.Tests.Messages
+namespace i18n.Tests
 {
-    public class I18NPoFileParserFacts : TestBase
+    public class I18NPoFileParserFacts
     {
         private readonly I18NPoFileParser parser;
         const string testPoFileName = "test.po";
@@ -17,7 +17,7 @@ namespace i18n.Tests.Messages
         public I18NPoFileParserFacts()
         {
             parser = new I18NPoFileParser();
-            poFileRuntimePath = Path.Combine(GetRuntimePath(), testPoFileName);
+            poFileRuntimePath = Path.Combine(TestHelper.GetRuntimePath(), testPoFileName);
         }
 
         [Fact]
@@ -97,7 +97,8 @@ msgstr """"
         {
             for (int i = 0; i < expectedI18NMessages.Length; i++)
             {
-                Assert.Equal(expectedI18NMessages[i], result[i]);
+                Assert.Equal(expectedI18NMessages[i].MsgId, result[i].MsgId);
+                Assert.Equal(expectedI18NMessages[i].MsgStr, result[i].MsgStr);
             }
         }
 
