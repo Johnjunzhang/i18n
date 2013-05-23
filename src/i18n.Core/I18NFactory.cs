@@ -5,21 +5,10 @@ using i18n.Core.PoParsers;
 
 namespace i18n.Core
 {
-    public class I18NFactory 
+    public class I18NFactory
     {
         private static Lazy<ILocalizingService> defaultService;
         private static volatile ILocalizingService localizingService;
-
-        public static void Init(string localePath)
-        {
-            defaultService = new Lazy<ILocalizingService>(() =>
-                {
-                    var poFileWatcher = new PoFileWatcher(localePath);
-                    var genericCache = new GenericCache<IDictionary<string, I18NMessage>>();
-                    poFileWatcher.OnChange += (o, e) => genericCache.Reset(new ChangeListParser(e.ChangeList).GetChangedCultures());
-                    return new LocalizingService(genericCache, localePath, new I18NPoFileParser());
-                }, true);
-        }
 
         public static ILocalizingService Default
         {
@@ -31,14 +20,24 @@ namespace i18n.Core
                     {
                         throw new Exception("Please init first. ");
                     }
-                    localizingService = defaultService.Value;                    
+                    localizingService = defaultService.Value;
                 }
                 return localizingService;
             }
-            set
-            {
-                localizingService = value;
-            }
+            set { localizingService = value; }
+        }
+
+        public static void Init(string localePath)
+        {
+            defaultService = new Lazy<ILocalizingService>(() =>
+                {
+                    var poFileWatcher = new PoFileWatcher(localePath);
+                    var genericCache = new GenericCache<IDictionary<string, I18NMessage>>();
+                    poFileWatcher.OnChange +=
+                        (o, e) => genericCache.Reset(new ChangeListParser(e.ChangeList).GetChangedCultures());
+                    poFileWatcher.Begin();
+                    return new LocalizingService(genericCache, localePath, new I18NPoFileParser());
+                }, true);
         }
     }
 }
