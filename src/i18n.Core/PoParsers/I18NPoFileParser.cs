@@ -34,7 +34,7 @@ namespace i18n.Core.PoParsers
                             {
                                 var result =
                                     new[] {TRANSLATION_KEY, TRANSLATION}.ToList()
-                                                                        .Select(s => ParseTranslation(ref line, fs, s))
+                                                                        .Select(translationKeyWords => ParseTranslation(ref line, fs, translationKeyWords))
                                                                         .ToArray();
                                 i18NMessages.Add(result[0], new I18NMessage(result[0], result[1]));
                             }
@@ -61,7 +61,12 @@ namespace i18n.Core.PoParsers
                     values.Add(line.Trim('"'));
                 }
             }
-            return string.Join("", values);
+            return string.Join("", values.ToList().Select(ParseEscapeCharacters).ToArray());
+        }
+
+        private static string ParseEscapeCharacters(string line)
+        {
+            return line.Replace("\\", "");
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -56,6 +57,35 @@ msgstr """"";
         }
 
         [Fact]
+        public void should_parse_pofile_with_escape_characters()
+        {
+            const string content = @"#: .\\test.html:22
+msgid """"
+""Choosing \""I do not agree\"" means ""
+""another line""
+msgstr """"
+
+#: ..\\test-another.html:22
+msgid "" another \"".\""""
+msgstr ""another\"".\""s translation""";
+            CreatePoFile(testPoFileName, content);
+
+            var result = (IList<I18NMessage>)parser.Parse(poFileRuntimePath).Values.ToList();
+
+            Assert.Equal(2, result.Count);
+
+            var expectedI18NMessages = new[]
+                {
+                    new I18NMessage("Choosing \"I do not agree\" means another line", ""),
+                    new I18NMessage(" another \".\"","another\".\"s translation"), 
+                };
+            VerifyResult(expectedI18NMessages, result);
+
+            Dispose(poFileRuntimePath);
+        }
+
+
+        [Fact]
         public void should_return_correct_result_when_parse_multiple_translation_block_with_blank_line_inside()
         {
             const string content = @"..\\test.html:15
@@ -64,7 +94,7 @@ msgstr """"
 
 #: ..\\test.html:20
 #: ..\\test-another.html:22
-msgid ""another.""
+msgid "" another ""
 msgstr ""another's translation""
 
 #: ..\\test.html:45
@@ -84,7 +114,7 @@ msgstr """"
             var expectedI18NMessages = new[]
                 {
                     new I18NMessage("welcome", ""), 
-                    new I18NMessage("another.", "another's translation"), 
+                    new I18NMessage(" another ", "another's translation"), 
                     new I18NMessage("For ease of completing this questionnaire, you have to answer some mandatory questions before starting.", "")
                 };
 
