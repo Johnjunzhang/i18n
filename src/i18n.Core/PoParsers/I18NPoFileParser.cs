@@ -66,7 +66,7 @@ namespace i18n.Core.PoParsers
 
         private static string ParseEscapeCharacters(string line)
         {
-            return line.Replace("\\", "");
+            return line.Replace("\\\"", "\"").Replace("\\\\", "\\");
         }
     }
 }

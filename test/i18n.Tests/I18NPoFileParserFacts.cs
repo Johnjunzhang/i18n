@@ -62,7 +62,7 @@ msgstr """"";
             const string content = @"#: .\\test.html:22
 msgid """"
 ""Choosing \""I do not agree\"" means ""
-""another line""
+""another \\ 'line'""
 msgstr """"
 
 #: ..\\test-another.html:22
@@ -76,14 +76,13 @@ msgstr ""another\"".\""s translation""";
 
             var expectedI18NMessages = new[]
                 {
-                    new I18NMessage("Choosing \"I do not agree\" means another line", ""),
+                    new I18NMessage("Choosing \"I do not agree\" means another \\ 'line'", ""),
                     new I18NMessage(" another \".\"","another\".\"s translation"), 
                 };
             VerifyResult(expectedI18NMessages, result);
 
             Dispose(poFileRuntimePath);
         }
-
 
         [Fact]
         public void should_return_correct_result_when_parse_multiple_translation_block_with_blank_line_inside()
